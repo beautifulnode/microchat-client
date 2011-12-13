@@ -1,0 +1,71 @@
+<html> 
+<head> 
+    <title>Cat Chat</title> 
+    <link rel="stylesheet" href="css/base.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="css/skeleton.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="css/layout.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    
+    <script src="js/AIRAliases.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery-1.7.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/coffee-script.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/sugar-1.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+    
+</head> 
+<body> 
+  
+    <div class="container">
+      <textarea id='msg' autofocus placeholder='What are you doing?' style="width: 95%;margin-top: 5px;"></textarea>
+      <button id="chat" style='width: 95%;'>Chat</button>
+      <ul></ul>
+    </div>
+    
+    <script type="text/coffeescript"> 
+      chatUrl = "http://catchat.wilbur.io/messages"
+
+      #completeHandler = (event) ->
+        #dataXML = event.target.data
+        #air.trace(dataXML)
+
+      post = (nick, msg) ->
+        request = new air.URLRequest("#{chatUrl}")
+        request.method = air.URLRequestMethod.POST
+        request.contentType = "application/json"
+        request.data = JSON.stringify({ author: nick, body: msg})
+
+        loader = new air.URLLoader()
+        #loader.addEventListener(air.Event.COMPLETE, completeHandler)
+        loader.load(request)
+      
+      addMsg = (nick, message, created) ->
+        li = $("""
+          <li style='display:none;border-bottom: 2px solid #f5f5f5;margin:0;padding:0;'>
+            <p style='margin:0;padding:0;color: green;'>#{nick} said #{Date.create(created).relative()}</p>
+            <p style='margin:0;padding:0;'>#{message}</p>
+          </li>
+        """)
+        $('ul').prepend(li)
+        li.show 'slow'
+
+      $ -> 
+        nick = prompt 'What is your nickname?'
+
+        $('title').text("CatChat - #{nick} v0.2.0")
+        $('#chat').click ->
+          post nick, $('#msg').val()
+          addMsg nick, $('#msg').val(), Date.create('now')
+          $('#msg').val('')
+
+        refresh = ->
+         $.getJSON "#{chatUrl}?startkey=#{(1).minuteBefore('now')}", (chats) ->  
+           if chats? and chats.length > 0
+             addMsg(chat.author, chat.body, chat.dateCreated) for chat in chats
+        
+        setInterval refresh, 60000
+        
+        $.getJSON "#{chatUrl}?limit=10", (chats) ->  
+           $('ul').empty()
+           if chats? and chats.length > 0
+             addMsg(chat.author, chat.body, chat.dateCreated) for chat in chats
+    </script>    
+</body> 
+</html>
