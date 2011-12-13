@@ -10,6 +10,8 @@
     <script src="js/coffee-script.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/sugar-1.1.1.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/sproutcore.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/showdown.js" type="text/javascript" charset="utf-8"></script>
+    
 </head> 
 <body> 
   
@@ -21,7 +23,7 @@
         {{/view}}
         {{#collection contentBinding="App.messagesController" tagName="ul" }}
           <p style='margin:0;padding:0;color: green;'>{{content.author}} said <span style="color: rgba(0,0,0,.5);">{{content.fmtCreated}}</span></p>
-          <div style='margin:0;padding:0;color: rgba(0,0,0,.8);'>{{content.body}}</div>        
+          <div style='margin:0;padding:0;color: rgba(0,0,0,.8);'>{{{content.markdown}}}</div>        
         {{/collection}}        
       </script>
     </div>
@@ -29,16 +31,6 @@
     <script type="text/coffeescript"> 
       chatUrl = "http://catchat.wilbur.io/messages"
 
-      post = (nick, msg) ->
-        request = new air.URLRequest("#{chatUrl}")
-        request.method = air.URLRequestMethod.POST
-        request.contentType = "application/json"
-        request.data = JSON.stringify({ author: nick, body: msg})
-
-        loader = new air.URLLoader()
-        #loader.addEventListener(air.Event.COMPLETE, completeHandler)
-        loader.load(request)
-      
       # Get NickName
       storedValue = air.EncryptedLocalStore.getItem("nick")
       nick = storedValue.readUTFBytes(storedValue.length) if storedValue?
@@ -48,9 +40,10 @@
         bytes.writeUTFBytes(prompt('Enter your nickname:'))
         air.EncryptedLocalStore.setItem("nick", bytes) 
       
-      $('title').text("CatChat - #{nick} v0.3.0")
+      $('title').text("CatChat - #{nick} v0.3.2")
       
       # setup SproutCore App
+      window.showdown = new Showdown.converter()
       window.App = App = SC.Application.create()
       App.Author = SC.Object.extend()
       
@@ -60,6 +53,12 @@
         fmtCreated: ( ->
           Date.create(@get('dateCreated')).format('{Weekday} {12hr}:{mm}{tt}')
         ).property('dateCreated')
+        markdown: ( ->
+          # Error parsing
+          #html = window.showdown.makeHtml @get('body') 
+          #html or @get('body')  
+          @get('body')      
+        ).property('body')
       
       App.messagesController = SC.ArrayProxy.create
         content: []

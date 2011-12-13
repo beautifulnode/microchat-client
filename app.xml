@@ -1,12 +1,18 @@
 <application xmlns="http://ns.adobe.com/air/application/2.7"> 
     <id>catchat</id> 
     <name>Cat Chat</name>
-    <versionNumber>0.3.0</versionNumber> 
+    <versionNumber>0.3.1</versionNumber> 
     <filename>catchat</filename> 
     <initialWindow> 
         <content>index.html</content> 
         <visible>true</visible> 
         <width>400</width> 
         <height>600</height> 
-    </initialWindow> 
+    </initialWindow>
+    <icon>
+      <image16x16>icons/jackhq-16.png</image16x16>
+      <image32x32>icons/jackhq-32.png</image32x32>
+      <image48x48>icons/jackhq-48.png</image48x48>
+      <image128x128>icons/jackhq-128.png</image128x128>
+    </icon> 
 </application>
