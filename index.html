@@ -9,22 +9,25 @@
     <script src="js/jquery-1.7.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/coffee-script.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/sugar-1.1.1.min.js" type="text/javascript" charset="utf-8"></script>
-    
+    <script src="js/sproutcore.js" type="text/javascript" charset="utf-8"></script>
 </head> 
 <body> 
   
     <div class="container">
-      <textarea id='msg' autofocus placeholder='What are you doing?' style="width: 95%;margin-top: 5px;"></textarea>
-      <button id="chat" style='width: 95%;'>Chat</button>
-      <ul></ul>
+      <script type='text/html'>
+        {{#view App.CreateMessage}}
+          <textarea id='msg' autofocus placeholder='What are you doing?' style="width: 95%;margin-top: 5px;"></textarea>
+          <button id="chat" style='width: 95%;'>Chat</button>          
+        {{/view}}
+        {{#collection contentBinding="App.messagesController" tagName="ul" }}
+          <p style='margin:0;padding:0;color: green;'>{{content.author}} said <span style="color: rgba(0,0,0,.5);">{{content.fmtCreated}}</span></p>
+          <div style='margin:0;padding:0;color: rgba(0,0,0,.8);'>{{content.body}}</div>        
+        {{/collection}}        
+      </script>
     </div>
     
     <script type="text/coffeescript"> 
       chatUrl = "http://catchat.wilbur.io/messages"
-
-      #completeHandler = (event) ->
-        #dataXML = event.target.data
-        #air.trace(dataXML)
 
       post = (nick, msg) ->
         request = new air.URLRequest("#{chatUrl}")
@@ -36,36 +39,69 @@
         #loader.addEventListener(air.Event.COMPLETE, completeHandler)
         loader.load(request)
       
-      addMsg = (nick, message, created) ->
-        li = $("""
-          <li style='display:none;border-bottom: 2px solid #f5f5f5;margin:0;padding:0;'>
-            <p style='margin:0;padding:0;color: green;'>#{nick} said #{Date.create(created).relative()}</p>
-            <p style='margin:0;padding:0;'>#{message}</p>
-          </li>
-        """)
-        $('ul').prepend(li)
-        li.show 'slow'
+      # Get NickName
+      storedValue = air.EncryptedLocalStore.getItem("nick")
+      nick = storedValue.readUTFBytes(storedValue.length) if storedValue?
+      
+      unless nick?
+        bytes = new air.ByteArray()
+        bytes.writeUTFBytes(prompt('Enter your nickname:'))
+        air.EncryptedLocalStore.setItem("nick", bytes) 
+      
+      $('title').text("CatChat - #{nick} v0.3.0")
+      
+      # setup SproutCore App
+      window.App = App = SC.Application.create()
+      App.Author = SC.Object.extend()
+      
+      App.author = App.Author.create nick: nick
+      
+      App.Message = SC.Object.extend
+        fmtCreated: ( ->
+          Date.create(@get('dateCreated')).format('{Weekday} {12hr}:{mm}{tt}')
+        ).property('dateCreated')
+      
+      App.messagesController = SC.ArrayProxy.create
+        content: []
+        createMessage: (msg) ->
+          @.unshiftObject App.Message.create(msg)
+          
+          
+        post: (msgBody) ->
+          msg = author: App.author.nick, body: msgBody
+          
+          request = new air.URLRequest("#{chatUrl}")
+          request.method = air.URLRequestMethod.POST
+          request.contentType = "application/json"
+          request.data = JSON.stringify(msg)
 
-      $ -> 
-        nick = prompt 'What is your nickname?'
-
-        $('title').text("CatChat - #{nick} v0.2.0")
-        $('#chat').click ->
-          post nick, $('#msg').val()
-          addMsg nick, $('#msg').val(), Date.create('now')
-          $('#msg').val('')
-
-        refresh = ->
-         $.getJSON "#{chatUrl}?startkey=#{(1).minuteBefore('now')}", (chats) ->  
-           if chats? and chats.length > 0
-             addMsg(chat.author, chat.body, chat.dateCreated) for chat in chats
+          loader = new air.URLLoader()
+          loader.load(request)
+          
+          msg.dateCreated = Date.create('now')
+          @createMessage msg
+          
+        refresh: ->
+          $.getJSON "#{chatUrl}?startkey=" + (10).secondBefore('now').iso(), (chats) ->  
+            if chats? and chats.length > 0
+              $('ul').hide()
+              for chat in chats
+                if chat.author != nick
+                  App.messagesController.createMessage chat 
+              $('ul').show('5000')
         
-        setInterval refresh, 60000
-        
-        $.getJSON "#{chatUrl}?limit=10", (chats) ->  
-           $('ul').empty()
-           if chats? and chats.length > 0
-             addMsg(chat.author, chat.body, chat.dateCreated) for chat in chats
+      App.CreateMessage = SC.View.extend
+        click: ->
+          msgBody = @$('textarea').val()
+          App.messagesController.post msgBody
+          @$('textarea').val('')
+
+      
+      $.getJSON "#{chatUrl}?limit=100", (chats) ->  
+        App.messagesController.createMessage(chat) for chat in chats
+
+      setInterval App.messagesController.refresh, 10000
+      
     </script>    
 </body> 
 </html>

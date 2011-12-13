@@ -3,3 +3,4 @@
 *.air
 newcert.p12
 .air
+.DS_Store
