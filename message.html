@@ -1,0 +1,30 @@
+<!DOCTYPE html>  <html> <head>   <title>message.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="app.html">                 app.coffee               </a>                                           <a class="source" href="messages.html">                 messages.coffee               </a>                                           <a class="source" href="message.html">                 message.coffee               </a>                                           <a class="source" href="ping.html">                 ping.coffee               </a>                                           <a class="source" href="createMessage.html">                 createMessage.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               message.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Message Model</h1>
+
+<p>The Message Model is the core of the application.
+It maintains the structure of each timeline message
+and properly manages the post of the message</p>
+
+<p>Note: in the future we should proxy out the post 
+message using a Mixin, so that if it is running on 
+air or phonegap the post api can be swapped.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">App.Message = </span><span class="nx">Ember</span><span class="p">.</span><span class="nb">Object</span><span class="p">.</span><span class="nx">extend</span>
+  <span class="nv">fmtCreated: </span><span class="p">(</span> <span class="o">-&gt;</span>
+    <span class="nb">Date</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">@get</span><span class="p">(</span><span class="s1">&#39;dateCreated&#39;</span><span class="p">)).</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;{Weekday} {12hr}:{mm}{tt}&#39;</span><span class="p">)</span>
+  <span class="p">).</span><span class="nx">property</span><span class="p">(</span><span class="s1">&#39;dateCreated&#39;</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h1>Post Method</h1>
+
+<p>no params</p>
+
+<p>This method will take the current method instance and post
+it to the server, based on the set url attribute.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">post: </span><span class="nf">(url) -&gt;</span>
+    <span class="nv">msg = author: </span><span class="nx">@get</span><span class="p">(</span><span class="s1">&#39;author&#39;</span><span class="p">),</span> <span class="nv">body: </span><span class="nx">@get</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span>
+    
+    <span class="nv">request = </span><span class="k">new</span> <span class="nx">air</span><span class="p">.</span><span class="nx">URLRequest</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+    <span class="nv">request.method = </span><span class="nx">air</span><span class="p">.</span><span class="nx">URLRequestMethod</span><span class="p">.</span><span class="nx">POST</span>
+    <span class="nv">request.contentType = </span><span class="s2">&quot;application/json&quot;</span>
+    <span class="nv">request.data = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+
+    <span class="nv">loader = </span><span class="k">new</span> <span class="nx">air</span><span class="p">.</span><span class="nx">URLLoader</span><span class="p">()</span>
+    <span class="nx">loader</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+    
+    <span class="nv">msg.dateCreated = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">)</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

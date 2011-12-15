@@ -1,0 +1,53 @@
+<!DOCTYPE html>  <html> <head>   <title>messages.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="app.html">                 app.coffee               </a>                                           <a class="source" href="messages.html">                 messages.coffee               </a>                                           <a class="source" href="message.html">                 message.coffee               </a>                                           <a class="source" href="ping.html">                 ping.coffee               </a>                                           <a class="source" href="createMessage.html">                 createMessage.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               messages.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Messages Controller</h1>
+
+<p>The messages controller handles the posting of 
+new messages and the collection of incoming messages</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">App.messagesController = </span><span class="nx">Ember</span><span class="p">.</span><span class="nx">ArrayProxy</span><span class="p">.</span><span class="nx">create</span>
+  <span class="nv">content: </span><span class="p">[]</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h2>Create Message Method</h2>
+
+<p>The createMessage method generates a new message and pops it 
+in the content array.  It also returns a callback incase
+any additional functionality is required</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">createMessage: </span><span class="nf">(msg, cb) -&gt;</span>    
+    <span class="nv">msg = </span><span class="nx">App</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+    <span class="err">@</span><span class="p">.</span><span class="nx">unshiftObject</span> <span class="nx">msg</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">msg</span><span class="p">)</span> <span class="k">if</span> <span class="nx">cb</span><span class="o">?</span>
+   </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>Post Method</h2>
+
+<p>This method is the hook from the click event
+on the CreateMessage view, it creates the message
+and then posts the message to the server.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">post: </span><span class="nf">(msgBody) -&gt;</span>
+    <span class="nv">url = </span><span class="nx">@get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">)</span>
+    <span class="nx">@createMessage</span> 
+      <span class="nv">author: </span><span class="nx">App</span><span class="p">.</span><span class="nx">messagesController</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;nick&#39;</span><span class="p">)</span>
+      <span class="nv">body: </span><span class="nx">msgBody</span>
+      <span class="nf">(err, msg) -&gt;</span> 
+        <span class="nx">msg</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+		</pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h2>Load Method</h2>
+
+<p>The load method makes the ajax call to the server
+to pull a group of messages based on a given day</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">load: </span><span class="nf">(dt, cb) -&gt;</span>
+	  <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span> <span class="nx">@get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;?startkey=&quot;</span> <span class="o">+</span> <span class="nx">dt</span><span class="p">.</span><span class="nx">iso</span><span class="p">(),</span> <span class="nx">cb</span>
+  </pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h2>Refresh Method</h2>
+
+<p>The Refresh Method get any new message that 
+occurred in the last 10 seconds, not real time
+but pretty close :-)</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">refresh: </span><span class="o">-&gt;</span>
+    <span class="nx">@load</span> <span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">secondBefore</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">),</span> <span class="nf">(chats) -&gt;</span>  
+      <span class="k">if</span> <span class="nx">chats</span><span class="o">?</span> <span class="o">and</span> <span class="nx">chats</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="nv">nick = </span><span class="nx">App</span><span class="p">.</span><span class="nx">messagesController</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;nick&#39;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="nx">chat</span> <span class="k">in</span> <span class="nx">chats</span>
+          <span class="k">if</span> <span class="nx">chat</span><span class="p">.</span><span class="nx">author</span> <span class="o">!=</span> <span class="nx">nick</span>
+            <span class="nx">App</span><span class="p">.</span><span class="nx">messagesController</span><span class="p">.</span><span class="nx">createMessage</span> <span class="nx">chat</span><span class="p">,</span> <span class="nf">(err, msg) -&gt;</span> 
+              <span class="k">try</span>
+                <span class="nv">reg = </span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">App</span><span class="p">.</span><span class="nx">messagesController</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;nick&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|team&quot;</span><span class="p">)</span>
+                <span class="nx">App</span><span class="p">.</span><span class="nx">ping</span><span class="p">.</span><span class="nx">play</span><span class="p">()</span> <span class="k">if</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">match</span> <span class="nx">reg</span>
+              <span class="k">catch</span> <span class="nx">error</span>
+                <span class="nx">air</span><span class="p">.</span><span class="nx">trace</span> <span class="nx">error</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h2>All Method</h2>
+
+<p>This all method returns the last days worth of messages
+Again there is no need to overwhelm you, awesome search
+will be coming soon!</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">all: </span><span class="o">-&gt;</span>
+	  <span class="nx">@load</span> <span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">dayBefore</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">),</span> <span class="nf">(chats) -&gt;</span>  
+      <span class="nx">App</span><span class="p">.</span><span class="nx">messagesController</span><span class="p">.</span><span class="nx">createMessage</span><span class="p">(</span><span class="nx">chat</span><span class="p">)</span> <span class="k">for</span> <span class="nx">chat</span> <span class="k">in</span> <span class="nx">chats</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
