@@ -1,0 +1,26 @@
+App.Author = SC.Object.extend
+  name: null
+  nick: ( -> 
+    # Get NickName
+    #storedValue = air.EncryptedLocalStore.getItem("nick")
+    #if storedValue.length > 0
+    #  @name = storedValue.readUTFBytes(storedValue.length) 
+    #else
+    #  @name = prompt('Enter your nickname:', nick)      
+
+    #bytes = new air.ByteArray()
+    #bytes.writeUTFBytes(@name)
+    #air.EncryptedLocalStore.setItem("nick", bytes) 
+    name = 'twilson63'
+    'twilson63'
+  ).property('name')
+
+App.author = App.Author.create()
+
+
+markdown: ( ->
+  # Error parsing
+  #html = window.showdown.makeHtml @get('body') 
+  #html or @get('body')  
+  @get('body')      
+).property('body')

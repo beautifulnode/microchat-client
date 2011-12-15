@@ -1,7 +1,7 @@
 <application xmlns="http://ns.adobe.com/air/application/2.7"> 
     <id>catchat</id> 
     <name>Cat Chat</name>
-    <versionNumber>0.3.1</versionNumber> 
+    <versionNumber>0.4.0</versionNumber> 
     <filename>catchat</filename> 
     <initialWindow> 
         <content>index.html</content> 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>  <html> <head>   <title>ping.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="app.html">                 app.coffee               </a>                                           <a class="source" href="messages.html">                 messages.coffee               </a>                                           <a class="source" href="message.html">                 message.coffee               </a>                                           <a class="source" href="ping.html">                 ping.coffee               </a>                                           <a class="source" href="createMessage.html">                 createMessage.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               ping.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Ping</h1>
+
+<p>Ping is a model that controls the management of the 
+ping sound effect when a message is put in the chat 
+window with the current users nick or team</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">App.Ping = </span><span class="nx">Ember</span><span class="p">.</span><span class="nb">Object</span><span class="p">.</span><span class="nx">extend</span>
+  <span class="nv">name: </span><span class="s2">&quot;/ping.mp3&quot;</span>
+  <span class="nv">sound: </span><span class="kc">null</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h1>Play Method</h1>
+
+<p>no params</p>
+
+<p>This method when called will attempt to play the 
+sound file if it is correctly set to an attibute on the
+current Ping Model Instance</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">play: </span><span class="o">-&gt;</span> <span class="nx">@get</span><span class="p">(</span><span class="s1">&#39;sound&#39;</span><span class="p">).</span><span class="nx">play</span><span class="p">()</span> <span class="k">if</span> <span class="nx">@get</span><span class="p">(</span><span class="s1">&#39;sound&#39;</span><span class="p">)</span><span class="o">?</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h1>Load Method</h1>
+
+<p>no params</p>
+
+<p>The load method performs the process of loading the sound file
+into the application, this process should only have to occur
+one time and then play many.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">load: </span><span class="o">-&gt;</span>
+    <span class="k">try</span>        
+      <span class="nv">s = </span><span class="k">new</span> <span class="nx">air</span><span class="p">.</span><span class="nx">Sound</span><span class="p">()</span>
+      <span class="nx">s</span><span class="p">.</span><span class="nx">addEventListener</span> <span class="nx">air</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">COMPLETE</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> 
+        <span class="nx">@set</span><span class="p">(</span><span class="s1">&#39;sound&#39;</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">)</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">play</span><span class="p">()</span>     
+      <span class="nv">req = </span><span class="k">new</span> <span class="nx">air</span><span class="p">.</span><span class="nx">URLRequest</span> <span class="nx">@get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+      <span class="nx">s</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+
+    <span class="k">catch</span> <span class="nx">error</span>
+      <span class="nx">air</span><span class="p">.</span><span class="nx">trace</span> <span class="nx">error</span>
+    
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
