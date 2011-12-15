@@ -93,7 +93,7 @@ task 'sign', 'sign air file', ->
       "catchat.airi" 
       "catchat.air"
     ]
-    air.stdout.on 'data', (data) -> print data.toString()
+    air.stdout.on 'data', (data) -> print data.toString() 
     air.stderr.on 'data', (data) -> log data.toString(), red
     air.on 'exit', (status) -> callback?() if status is 0
   

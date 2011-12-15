@@ -23,21 +23,14 @@ App.messagesController = Ember.ArrayProxy.create
   # and then posts the message to the server.
   #
   post: (msgBody) ->
-    url = @get('url')
+    #url = @get('url')
+    url = "http://catchat.wilbur.io/messages"
     @createMessage 
       author: App.messagesController.get('nick')
       body: msgBody
       (err, msg) -> 
         msg.post(url)
 		
-  # ## Load Method
-  # 
-  # The load method makes the ajax call to the server
-  # to pull a group of messages based on a given day
-  #
-  load: (dt, cb) ->
-	  $.getJSON @get("url") + "?startkey=" + dt.iso(), cb
-  
   # ## Refresh Method
   #
   # The Refresh Method get any new message that 
@@ -45,18 +38,12 @@ App.messagesController = Ember.ArrayProxy.create
   # but pretty close :-)
   #
   refresh: ->
-    @load (10).secondBefore('now'), (chats) ->  
-      if chats? and chats.length > 0
-        nick = App.messagesController.get('nick')
-        
-        for chat in chats
-          if chat.author != nick
-            App.messagesController.createMessage chat, (err, msg) -> 
-              try
-                reg = new RegExp(App.messagesController.get('nick') + "|team")
-                App.ping.play() if msg.get('body').match reg
-              catch error
-                air.trace error
+    $.getJSON "http://catchat.wilbur.io/messages" + "?startkey=" + (10).secondBefore('now').iso(), (chats) ->  
+      for chat in chats
+        if chat.author != window.nick
+          App.messagesController.createMessage chat, (err, msg) -> 
+            reg = new RegExp(window.nick + "|team")
+            App.ping.play() if msg.get('body').match reg
 
   # ## All Method
   #
@@ -65,5 +52,5 @@ App.messagesController = Ember.ArrayProxy.create
   # will be coming soon!
   #  
   all: ->
-	  @load (1).dayBefore('now'), (chats) ->  
+	  $.getJSON "http://catchat.wilbur.io/messages" + "?startkey=" + (1).dayBefore('now').iso(), (chats) ->  
       App.messagesController.createMessage(chat) for chat in chats
