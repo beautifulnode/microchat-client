@@ -4,7 +4,7 @@ window.nick = nick = prompt 'Enter your username:'
 App.messagesController.set('nick', nick)
 
 # Setup Title
-$('title').text("CatChat - #{nick} v0.4.1")
+$('title').text("CatChat - #{nick} v0.4.2")
 
 # load a full days worth of messages.
 App.messagesController.all()

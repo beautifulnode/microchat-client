@@ -6,7 +6,6 @@
 
 App.CreateMessage = Ember.View.extend
   click: ->
-    air.trace 'Clicked...'
-    msgBody = @$('textarea').val()
+    msgBody = $('textarea').val()
     App.messagesController.post msgBody if msgBody? and msgBody.length > 0
-    @$('textarea').val('')
+    $('textarea').val('')

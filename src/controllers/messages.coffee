@@ -6,6 +6,7 @@
 #
 App.messagesController = Ember.ArrayProxy.create
   content: []
+  url: "http://catchat.wilbur.io/messages"
   # ## Create Message Method
   #
   # The createMessage method generates a new message and pops it 
@@ -23,8 +24,8 @@ App.messagesController = Ember.ArrayProxy.create
   # and then posts the message to the server.
   #
   post: (msgBody) ->
-    #url = @get('url')
-    url = "http://catchat.wilbur.io/messages"
+    url = @url
+    msgBody = msgBody.replace(/\!\[/g, '<img src=\"http://').replace(/\]/g, '.jpg.to\" />') if msgBody.match /\!\[(.*)\]/
     @createMessage 
       author: App.messagesController.get('nick')
       body: msgBody
@@ -42,6 +43,7 @@ App.messagesController = Ember.ArrayProxy.create
       for chat in chats
         if chat.author != window.nick
           App.messagesController.createMessage chat, (err, msg) -> 
+            App.messagesController.pop()
             reg = new RegExp(window.nick + "|team")
             App.ping.play() if msg.get('body').match reg
 
@@ -52,5 +54,19 @@ App.messagesController = Ember.ArrayProxy.create
   # will be coming soon!
   #  
   all: ->
-	  $.getJSON "http://catchat.wilbur.io/messages" + "?startkey=" + (1).dayBefore('now').iso(), (chats) ->  
+	  $.getJSON @url + "?startkey=" + (1).dayBefore('now').iso(), (chats) ->  
       App.messagesController.createMessage(chat) for chat in chats
+
+  pop: ->
+    setTimeout ( -> 
+      new_item = $('ul li').first()
+      new_item.css 'background', 'lightyellow'
+      new_item.slideFadeToggle()
+      setTimeout ( ->
+        new_item.slideFadeToggle()
+        setTimeout ( -> 
+          new_item.css 'background', '#fff'
+        ), 500              
+      ), 500
+    ), 500
+    

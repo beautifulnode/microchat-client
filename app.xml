@@ -1,8 +1,9 @@
-<application xmlns="http://ns.adobe.com/air/application/2.7"> 
+<application xmlns="http://ns.adobe.com/air/application/2.7" minimumPatchLevel="0">
     <id>catchat-0-4-1</id> 
     <name>CatChat 0-4-1</name>
-    <versionNumber>0.4.1</versionNumber> 
+    <versionNumber>0.4.2</versionNumber> 
     <filename>catchat-0-4-1</filename> 
+    <supportedProfiles>desktop mobileDevice</supportedProfiles>
     <initialWindow> 
         <content>index.html</content> 
         <visible>true</visible> 

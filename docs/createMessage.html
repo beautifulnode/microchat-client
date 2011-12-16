@@ -4,9 +4,8 @@
 When clicked we get the content of the text box and then
 call the post message on the message controller.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">App.CreateMessage = </span><span class="nx">Ember</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span>
   <span class="nv">click: </span><span class="o">-&gt;</span>
-    <span class="nx">air</span><span class="p">.</span><span class="nx">trace</span> <span class="s1">&#39;Clicked...&#39;</span>
-    <span class="nv">msgBody = </span><span class="nx">@$</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+    <span class="nv">msgBody = </span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
     <span class="nx">App</span><span class="p">.</span><span class="nx">messagesController</span><span class="p">.</span><span class="nx">post</span> <span class="nx">msgBody</span> <span class="k">if</span> <span class="nx">msgBody</span><span class="o">?</span> <span class="o">and</span> <span class="nx">msgBody</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
-    <span class="nx">@$</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
