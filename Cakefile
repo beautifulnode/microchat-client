@@ -69,12 +69,8 @@ task 'create', 'create airi file', ->
     "js/jquery-1.7.min.js" 
     "js/sugar-1.1.1.min.js"
     "js/ember.min.js" 
+    "js/mrclean.js" 
     "js/app.js" 
-    "js/models/ping.js" 
-    "js/models/message.js" 
-    "js/views/createMessage.js" 
-    "js/init.js" 
-    "js/controllers/messages.js" 
   ]
   airi.stdout.on 'data', (data) -> print data.toString()
   airi.stderr.on 'data', (data) -> log data.toString(), red
