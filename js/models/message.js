@@ -1,3 +1,4 @@
+(function() {
 
   App.Message = Ember.Object.extend({
     fmtCreated: (function() {
@@ -18,3 +19,5 @@
       return msg.dateCreated = Date.create('now');
     }
   });
+
+}).call(this);

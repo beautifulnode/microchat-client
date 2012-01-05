@@ -1,3 +1,4 @@
+(function() {
 
   App.CreateMessage = Ember.View.extend({
     click: function() {
@@ -9,3 +10,5 @@
       return $('textarea').val('');
     }
   });
+
+}).call(this);

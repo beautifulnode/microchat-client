@@ -31,6 +31,7 @@ App.messagesController = Ember.ArrayProxy.create
       body: msgBody
       (err, msg) -> 
         msg.post(url)
+        $('textarea').focus()
 		
   # ## Refresh Method
   #
@@ -43,7 +44,7 @@ App.messagesController = Ember.ArrayProxy.create
       for chat in chats
         if chat.author != window.nick
           App.messagesController.createMessage chat, (err, msg) -> 
-            App.messagesController.pop()
+            #App.messagesController.pop()
             reg = new RegExp(window.nick + "|team")
             App.ping.play() if msg.get('body').match reg
 

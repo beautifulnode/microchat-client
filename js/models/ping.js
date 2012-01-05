@@ -1,3 +1,4 @@
+(function() {
 
   App.Ping = Ember.Object.extend({
     name: "/ping.mp3",
@@ -6,8 +7,8 @@
       if (this.get('sound') != null) return this.get('sound').play();
     },
     load: function() {
-      var req, s;
-      var _this = this;
+      var req, s,
+        _this = this;
       try {
         s = new air.Sound();
         s.addEventListener(air.Event.COMPLETE, function(event) {
@@ -21,3 +22,5 @@
       }
     }
   });
+
+}).call(this);

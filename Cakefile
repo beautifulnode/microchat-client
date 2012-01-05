@@ -67,6 +67,7 @@ task 'create', 'create airi file', ->
     "icons/jackhq-128.png" 
     "js/AIRAliases.js" 
     "js/jquery-1.7.min.js" 
+    "js/tabs.js"
     "js/sugar-1.1.1.min.js"
     "js/ember.min.js" 
     "js/app.js" 

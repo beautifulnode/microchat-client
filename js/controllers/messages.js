@@ -1,3 +1,4 @@
+(function() {
 
   App.messagesController = Ember.ArrayProxy.create({
     content: [],
@@ -17,7 +18,8 @@
         author: App.messagesController.get('nick'),
         body: msgBody
       }, function(err, msg) {
-        return msg.post(url);
+        msg.post(url);
+        return $('textarea').focus();
       });
     },
     refresh: function() {
@@ -29,7 +31,6 @@
           if (chat.author !== window.nick) {
             _results.push(App.messagesController.createMessage(chat, function(err, msg) {
               var reg;
-              App.messagesController.pop();
               reg = new RegExp(window.nick + "|team");
               if (msg.get('body').match(reg)) return App.ping.play();
             }));
@@ -66,3 +67,5 @@
       }), 500);
     }
   });
+
+}).call(this);

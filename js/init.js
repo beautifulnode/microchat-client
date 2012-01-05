@@ -5,7 +5,7 @@
 
   App.messagesController.set('nick', nick);
 
-  $('title').text("CatChat - " + nick + " v0.4.2");
+  $('title').text("CatChat - " + nick + " v0.5.0");
 
   App.messagesController.all();
 
