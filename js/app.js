@@ -131,7 +131,7 @@
 
   App.messagesController.set('nick', nick);
 
-  $('title').text("CatChat - " + nick + " v0.4.4");
+  $('title').text("CatChat - " + nick + " v0.4.5");
 
   App.messagesController.all();
 
