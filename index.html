@@ -4,41 +4,47 @@
   <link rel="stylesheet" href="css/base.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <link rel="stylesheet" href="css/skeleton.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <link rel="stylesheet" href="css/layout.css" type="text/css" media="screen" title="no title" charset="utf-8">
-
+  <link href='http://fonts.googleapis.com/css?family=PT+Sans+Caption' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Chango' rel='stylesheet' type='text/css'>
   <style type="text/css">
-  body { background: #fff; color: #f5f5f5; }
-  textarea { width: 95%; margin-top: 5px;  }
-  ul li { border-bottom: 2px solid pink; padding-bottom: 10px; margin-bottom: 10px; }
-  ul li p { margin: 0; padding: 0; color: #000; }
-  ul li p span { color: gray; }
-
-  ul li div { margin: 0; padding: 10px 0px; color: blue; font-size: 1.2em; }
-  
+  body { 
+    font-family: 'PT Sans Caption', sans-serif;
+  }
+  textarea { width: 70% }
   img { max-width: 100% }
+  h1.header {
+    font-family: 'Chango', cursive;
+  }
   </style>
 </head> 
 <body> 
   <div class="container">
+    <h1 class="header" style='text-align:center;'>Cat-Chat</h1>
     <script type='text/html'>
-      <textarea id='msg' autofocus placeholder='What are you doing?'></textarea>
-      {{#view App.CreateMessage}}
-	    <button id="chat" style='width: 95%;'>Chat</button>          
+      <div>
+      {{#view App.CreateMessage}}      
+      <button id="chat" style='float: right;' tabindex="0">Chat</button> 
       {{/view}}
+
+      <textarea id='msg' autofocus placeholder='What are you doing?' tabindex="1"></textarea>
+      </div>
+
       {{#collection contentBinding="App.messagesController" tagName="ul" }}
-        <p>{{content.author}}</p>
-        <div>{{{content.body}}}</div>
-        <p style="font-size: .7em;">{{content.fmtCreated}}</p>        
+        <div style="float:right;font-size: .7em;">{{content.fmtCreated}}</div>
+
+        <div style="padding:0;margin:0;"><strong>{{content.author}}</strong></div>
+        <div style="padding:0;margin:0;color:rgba(0,0,0,.8);margin-bottom: 5px;padding-bottom: 5px;border-bottom: 1px solid #000;">{{{content.body}}}</div>
       {{/collection}}        
     </script>
-	</div>    
-	
+  </div>    
+  
   <script src="js/AIRAliases.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/jquery-1.7.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/tabs.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/slidetoggle.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/sugar-1.1.1.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/ember.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/mrclean.js" type="text/javascript" charset="utf-8"></script>
   <script src="js/app.js" type="text/javascript" charset="utf-8"></script>
-	
 </body> 
 </html>

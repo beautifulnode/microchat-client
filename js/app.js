@@ -60,6 +60,7 @@
       if (msgBody.match(/\!\[(.*)\]/)) {
         msgBody = msgBody.replace(/\!\[/g, '<img src=\"http://').replace(/\]/g, '.jpg.to\" />');
       }
+      msgBody = msgBody.replace(/\n/g, '<br />');
       return this.createMessage({
         author: App.messagesController.get('nick'),
         body: msgBody
@@ -76,7 +77,6 @@
           if (chat.author !== window.nick) {
             _results.push(App.messagesController.createMessage(chat, function(err, msg) {
               var reg;
-              App.messagesController.pop();
               reg = new RegExp(window.nick + "|team");
               if (msg.get('body').match(reg)) return App.ping.play();
             }));
@@ -97,20 +97,6 @@
         }
         return _results;
       });
-    },
-    pop: function() {
-      return setTimeout((function() {
-        var new_item;
-        new_item = $('ul li').first();
-        new_item.css('background', 'lightyellow');
-        new_item.slideFadeToggle();
-        return setTimeout((function() {
-          new_item.slideFadeToggle();
-          return setTimeout((function() {
-            return new_item.css('background', '#fff');
-          }), 500);
-        }), 500);
-      }), 500);
     }
   });
 
@@ -121,7 +107,7 @@
       if ((text != null) && text.length > 0) {
         return MrClean.clean(text, function(err, msgBody) {
           App.messagesController.post(msgBody);
-          return $('textarea').val('');
+          return $('textarea').val('').focus();
         });
       }
     }
@@ -131,7 +117,7 @@
 
   App.messagesController.set('nick', nick);
 
-  $('title').text("CatChat - " + nick + " v0.4.5");
+  $('title').text("CatChat - " + nick + " v0.4.7");
 
   App.messagesController.all();
 

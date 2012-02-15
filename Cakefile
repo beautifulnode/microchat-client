@@ -1,5 +1,5 @@
 fs            = require 'fs'
-{print}       = require 'sys'
+{print}       = require 'util'
 {spawn, exec} = require 'child_process'
 ask = require 'ask'
 
@@ -67,6 +67,7 @@ task 'create', 'create airi file', ->
     "icons/jackhq-128.png" 
     "js/AIRAliases.js" 
     "js/jquery-1.7.min.js" 
+    "js/tabs.js"
     "js/sugar-1.1.1.min.js"
     "js/ember.min.js" 
     "js/mrclean.js" 

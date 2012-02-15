@@ -105,7 +105,7 @@ App.messagesController = Ember.ArrayProxy.create
   post: (msgBody) ->
     url = @url
     msgBody = msgBody.replace(/\!\[/g, '<img src=\"http://').replace(/\]/g, '.jpg.to\" />') if msgBody.match /\!\[(.*)\]/
-        
+    msgBody = msgBody.replace(/\n/g, '<br />')
     @createMessage 
       author: App.messagesController.get('nick')
       body: msgBody
@@ -123,7 +123,6 @@ App.messagesController = Ember.ArrayProxy.create
       for chat in chats
         if chat.author != window.nick
           App.messagesController.createMessage chat, (err, msg) -> 
-            App.messagesController.pop()
             reg = new RegExp(window.nick + "|team")
             App.ping.play() if msg.get('body').match reg
 
@@ -138,18 +137,18 @@ App.messagesController = Ember.ArrayProxy.create
       for chat in chats
         App.messagesController.createMessage(chat) 
 
-  pop: ->
-    setTimeout ( -> 
-      new_item = $('ul li').first()
-      new_item.css 'background', 'lightyellow'
-      new_item.slideFadeToggle()
-      setTimeout ( ->
-        new_item.slideFadeToggle()
-        setTimeout ( -> 
-          new_item.css 'background', '#fff'
-        ), 500              
-      ), 500
-    ), 500
+  # pop: ->
+  #   setTimeout ( -> 
+  #     new_item = $('ul li').first()
+  #     new_item.css 'background', 'lightyellow'
+  #     new_item.slideFadeToggle()
+  #     setTimeout ( ->
+  #       new_item.slideFadeToggle()
+  #       setTimeout ( -> 
+  #         new_item.css 'background', '#fff'
+  #       ), 500              
+  #     ), 500
+  #   ), 500
 
 # # CreateMessage View
 #
@@ -163,7 +162,7 @@ App.CreateMessage = Ember.View.extend
     if text? and text.length > 0
       MrClean.clean text, (err, msgBody) ->
         App.messagesController.post msgBody 
-        $('textarea').val('')
+        $('textarea').val('').focus()
 
 # Init App
 # Get Nick Name
@@ -171,7 +170,7 @@ window.nick = nick = prompt 'Enter your username:'
 App.messagesController.set('nick', nick)
 
 # Setup Title
-$('title').text("CatChat - #{nick} v0.4.5")
+$('title').text("CatChat - #{nick} v0.4.7")
 
 # load a full days worth of messages.
 App.messagesController.all()
